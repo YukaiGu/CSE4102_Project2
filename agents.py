@@ -143,14 +143,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
         # TODO: Question 2
 
         number_agents = game_state.get_num_agents()
-
+        
         def minimaxalgorithm(state, agent, depth):
             # Base Case
             if state.is_win() or state.is_loss() or depth == 0:
                 return self.evaluation_function(state)
             actions = state.get_legal_actions(agent)
-            if not actions:
-                return self.evaluation_function(state)
 
             # Agent Switching
             next_agent = agent + 1
@@ -192,9 +190,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
         return best_action
 
 
-            
-
-
 # === Q3 SELF-REFLECTION (1 point) ===
 # Write 3-5 sentences below, at least 25 words total.
 # This is a no-GenAI/coding-assistant assignment.
@@ -206,7 +201,9 @@ class MinimaxAgent(MultiAgentSearchAgent):
 # Include one sentence explaining the Q3 alpha-beta concept in your own words.
 #
 # YOUR RESPONSE:
-# Write your response here.
+# I did not use GenAI, AI tools, coding assistants, posted solutions, or online resources that solve this project.
+# I use the  "python3.13 autograder.py -q q3" test to check my response.
+# The alpha/beta use similar algorithm and rules compared with the Minmax, but it use less computational power by pruning, which break the recursion by comparing the alpha and beta value. Namely, alphabeta can avoid exploring future states that cannot affect the final decision.
 # === END Q3 SELF-REFLECTION ===
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
@@ -219,8 +216,72 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
 
     def get_action(self, game_state):
         # TODO: Question 3
-        raise NotImplementedError
 
+        number_agents = game_state.get_num_agents()
+        
+        def alphabetaAlgorithm(state, agent, depth, alpha, beta):
+            # Base Case
+            if state.is_win() or state.is_loss() or depth == 0:
+                return self.evaluation_function(state)
+            actions = state.get_legal_actions(agent)
+
+            # Agent Switching
+            next_agent = agent + 1
+            next_depth = depth # Hazards' move don't count as the Robot's move
+            if next_agent == number_agents:
+                next_agent = 0
+                next_depth = depth - 1
+
+            # Robot (Max Agent)
+            if agent == 0:
+                current_best_score = float("-inf")
+
+                for action in actions:
+                    next_state = state.generate_successor(agent, action)
+                    score = alphabetaAlgorithm(next_state, next_agent, next_depth, alpha, beta)
+                    current_best_score = max(current_best_score, score)
+                    alpha = max(alpha, current_best_score)
+                    if alpha >= beta:
+                        break
+                return current_best_score
+
+            # Hazard (Min Agent)
+            else: 
+                current_best_score = float("inf")
+                
+                for action in actions:
+                    next_state = state.generate_successor(agent, action)
+                    score = alphabetaAlgorithm(next_state, next_agent, next_depth, alpha, beta)
+                    current_best_score = min(current_best_score, score)
+                    beta = min(beta, current_best_score)
+                    if alpha >= beta:
+                        break
+                return current_best_score
+
+        # 5. Choose the best action
+        actions = game_state.get_legal_actions(0)
+        
+        # Initialize
+        best_action = actions[0]
+        current_best_score = float("-inf")
+        alpha = float("-inf")
+        beta = float("inf")
+        next_agent = 1 % number_agents
+        next_depth = self.depth
+
+        
+        for action in actions:
+            next_state = game_state.generate_successor(0, action)
+            score = alphabetaAlgorithm(next_state, next_agent, next_depth, alpha, beta)
+
+            if score > current_best_score:
+                current_best_score = score
+                best_action = action
+            alpha = max(alpha, current_best_score)
+            
+        return best_action
+
+            
 
 # === Q4 SELF-REFLECTION (1 point) ===
 # Write 3-5 sentences below, at least 25 words total.
