@@ -1,0 +1,42 @@
+{
+  "score": 7.0,
+  "max_score": 7.0,
+  "tests": [
+    {
+      "name": "Q2.1 Minimax chooses best worst case",
+      "score": 2.0,
+      "max_score": 2.0,
+      "status": "passed",
+      "output": "Minimax selected the action with the stronger worst-case outcome."
+    },
+    {
+      "name": "Q2.2 Minimax cycles through multiple hazards",
+      "score": 1.5,
+      "max_score": 1.5,
+      "status": "passed",
+      "output": "Minimax handled two hazard agents in the turn order."
+    },
+    {
+      "name": "Q2.3 Minimax respects search depth",
+      "score": 1.5,
+      "max_score": 1.5,
+      "status": "passed",
+      "output": "Minimax used self.depth; depth 1 and depth 2 selected different actions as expected."
+    },
+    {
+      "name": "Q2.4 Minimax returns a legal layout action",
+      "score": 1.0,
+      "max_score": 1.0,
+      "status": "passed",
+      "output": "Minimax returned a legal non-losing action on fireline_rescue: North."
+    },
+    {
+      "name": "Q2.R Self-reflection for Q2",
+      "score": 1.0,
+      "max_score": 1.0,
+      "status": "passed",
+      "output": "Completed self-reflection in agents.py (85 words)."
+    }
+  ],
+  "stdout_visibility": "visible"
+}
